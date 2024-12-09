@@ -10,6 +10,12 @@
     <loc>melbournebioinformatics.github.io/mb-varnish/LICENSE.html</loc>
   </url>
   <url>
+    <loc>melbournebioinformatics.github.io/mb-varnish/aio.html</loc>
+  </url>
+  <url>
+    <loc>melbournebioinformatics.github.io/mb-varnish/images.html</loc>
+  </url>
+  <url>
     <loc>melbournebioinformatics.github.io/mb-varnish/index.html</loc>
   </url>
   <url>
@@ -22,10 +28,22 @@
     <loc>melbournebioinformatics.github.io/mb-varnish/instructor/LICENSE.html</loc>
   </url>
   <url>
+    <loc>melbournebioinformatics.github.io/mb-varnish/instructor/aio.html</loc>
+  </url>
+  <url>
+    <loc>melbournebioinformatics.github.io/mb-varnish/instructor/images.html</loc>
+  </url>
+  <url>
     <loc>melbournebioinformatics.github.io/mb-varnish/instructor/index.html</loc>
   </url>
   <url>
+    <loc>melbournebioinformatics.github.io/mb-varnish/instructor/instructor-notes.html</loc>
+  </url>
+  <url>
     <loc>melbournebioinformatics.github.io/mb-varnish/instructor/introduction.html</loc>
+  </url>
+  <url>
+    <loc>melbournebioinformatics.github.io/mb-varnish/instructor/key-points.html</loc>
   </url>
   <url>
     <loc>melbournebioinformatics.github.io/mb-varnish/instructor/profiles.html</loc>
@@ -34,7 +52,13 @@
     <loc>melbournebioinformatics.github.io/mb-varnish/instructor/reference.html</loc>
   </url>
   <url>
+    <loc>melbournebioinformatics.github.io/mb-varnish/instructor-notes.html</loc>
+  </url>
+  <url>
     <loc>melbournebioinformatics.github.io/mb-varnish/introduction.html</loc>
+  </url>
+  <url>
+    <loc>melbournebioinformatics.github.io/mb-varnish/key-points.html</loc>
   </url>
   <url>
     <loc>melbournebioinformatics.github.io/mb-varnish/profiles.html</loc>
