@@ -2,9 +2,12 @@
 title: Setup
 ---
 
+Please follow the steps below and install the required software **before** the scheduled workshop.
+
+<!--
 FIXME: Setup instructions live in this document. Please specify the tools and
 the data sets the Learner needs to have installed.
-<!--
+
 ## Data Sets
 
 FIXME: place any data you want learners to use in `episodes/data` and then use
@@ -12,43 +15,45 @@ FIXME: place any data you want learners to use in `episodes/data` and then use
        link to it, replacing the example.com link.
 Download the [data zip file](https://example.com/FIXME) and unzip it to your Desktop
 -->
-## Software Setup
+## RStudio Setup
 
-We use VS Code for general coding. Make sure to install VS Code for your operating system following the instructions below:
+We use RStudio for coding in R.
 
-- [Windows](https://code.visualstudio.com/docs/setup/windows)
-- [macOS](https://code.visualstudio.com/docs/setup/mac)
-- [Linux](https://code.visualstudio.com/docs/setup/linux)
-
+[Click here and follow the instructions](https://posit.co/download/rstudio-desktop/) to install RStudio Desktop in your system.
 
 ::::::::::::::::: discussion
 
-### Windows users
+### R packages
 
-If you are a Windows user, you may also need WSL, the Windows Subsystem for Linux. WSL will allow you to use the Terminal from within VS Code and to execute UNIX style commands.
+Most workshops using R will require the installation of specific packages. Make sure to check in advance with the workshop organisers what packages need to be installed. 
 
-Follow the [official instructions here.](https://learn.microsoft.com/en-us/windows/wsl/install)
+You can install packages from CRAN using:
 
-After installing WSL, you will also need to install [GitBash](https://gitforwindows.org/).
+```r
+install.packages("package_name")
+```
 
-After installing GitBash, change the default Terminal executable on VS Code:
+If your package is in a different R repository, such as Bioconductor or GitHub, you may need the [BiocManager](https://www.bioconductor.org/install/) or [devtools](https://devtools.r-lib.org/) packages to install them. To install BiocManager:
 
-1. Open VS Code.
-2. From the `View` menu select `Command Palette --> Terminal: Select Default Profile`.
-3. Select `GitBash` as the default profile.
+```r
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.21")
+```
 
-✅ You're all set to use VS Code with GitBash on Windows. 
+For devtools, you can simply do:
+
+```r
+install.packages("devtools")
+```
+
+You can then install packages directly from GitHub with:
+
+```r
+devtools::install_github("username/reponame")
+```
 
 ::::::::::::::::::::::::::::
-
-
-## Environment management with conda
-
-For certain workshops, you may need to install [conda](https://docs.conda.io/en/latest/), an open-source software and package management system. This is usually necessary when working with Python code.
-
-Our preferred flavour of conda is [miniforge](https://github.com/conda-forge/miniforge), but you could also use [miniconda](https://www.anaconda.com/docs/getting-started/miniconda/main).
-
-[Click here and follow the miniforge installation instructions for your OS.](https://conda-forge.org/download/)
 
 
 <!--
