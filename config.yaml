@@ -7,6 +7,7 @@
 # mb: Melbourne Bioinformatics
 # mig: Melbourne Integrative Genomics
 # wehi: Walter and Eliza Hall Institute
+# abacbs: Australian Bioinformatics and Computational Biology Society
 carpentry: 'uom'
 
 # Alt-text description of the lesson.
@@ -22,6 +23,7 @@ created: ~ # FIXME
 keywords: 'software, data, lesson' # FIXME
 
 # Life cycle stage of the lesson
+# refer to <https://docs.carpentries.org/resources/curriculum/lesson-life-cycle.html> for details
 # possible values: pre-alpha, alpha, beta, stable
 life_cycle: 'pre-alpha' # FIXME
 
