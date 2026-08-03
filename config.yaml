@@ -62,8 +62,10 @@ contact: 'fixme@fixme.org' # FIXME
 # - another-learner.md
 
 # Order of episodes in your lesson
-episodes: 
+episodes:
 - introduction.Rmd
+# Delete the next line and episodes/python-with-reticulate.Rmd if this lesson is R only
+- python-with-reticulate.Rmd
 
 # Information for Learners
 learners: 
