@@ -246,6 +246,18 @@
 </div>
 <!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush3">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading3">
+        <a href="python-with-reticulate.html">2. Python with reticulate</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -311,6 +323,24 @@ output</li>
 with your lesson</li>
 <li>Run <code>sandpaper::build_lesson()</code> to preview your lesson
 locally</li>
+</ul></section><section id="python-with-reticulate"><h2 class="section-heading"><a href="python-with-reticulate.html">Python with reticulate</a></h2>
+<hr class="half-width">
+<ul>
+<li>
+<code>Sys.setenv(RETICULATE_PYTHON = "managed")</code> forces the
+reproducible environment; without it a local conda install wins and the
+build differs from CI</li>
+<li>
+<code>py_require()</code> declares packages and the Python version;
+<code>uv</code> provisions them on first use</li>
+<li>
+<code>exclude_newer</code> caps resolution at a date, since
+<code>renv.lock</code> never records Python packages</li>
+<li>
+<code>py$name</code> reads Python objects from R,
+<code>r.name</code> reads R objects from Python</li>
+<li>No CI change is needed: <code>uv</code> fetches the interpreter
+inside the build container</li>
 </ul></section>
 </div>
     </main>

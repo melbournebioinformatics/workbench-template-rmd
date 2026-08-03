@@ -246,6 +246,18 @@
 </div>
 <!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush3">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading3">
+        <a href="python-with-reticulate.html">2. Python with reticulate</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -381,7 +393,7 @@ reinforce the objectives.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Output </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -410,7 +422,7 @@ challenge blocks?</h3>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>You can add a line with at least three colons and a
 <code>solution</code> tag.</p>
@@ -478,6 +490,334 @@ output</li>
 with your lesson</li>
 <li>Run <code>sandpaper::build_lesson()</code> to preview your lesson
 locally</li>
+</ul>
+</div>
+</div>
+</div>
+<!--
+Place links that you need to refer to multiple times across pages here. Delete
+any links that you are not going to use.
+ -->
+</section></section><section id="aio-python-with-reticulate"><p>Content from <a href="python-with-reticulate.html">Python with reticulate</a></p>
+<hr>
+<p>Last updated on 2026-08-03 |
+
+        <a href="https://github.com/melbournebioinformatics/workbench-template-rmd/edit/main/episodes/python-with-reticulate.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+<div class="text-end">
+          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
+        </div>
+<div class="overview card">
+<h2 class="card-header">Overview</h2>
+<div class="row g-0">
+<div class="col-md-4">
+<div class="card-body">
+<div class="inner">
+<h3 class="card-title">Questions</h3>
+<ul>
+<li>How do I run Python code in a Workbench lesson?</li>
+<li>How do I declare the Python packages an episode needs?</li>
+<li>How do I pass objects between R and Python?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-8">
+<div class="card-body">
+<div class="inner bordered">
+<h3 class="card-title">Objectives</h3>
+<ul>
+<li>Declare an episode’s Python dependencies with
+<code>py_require()</code>
+</li>
+<li>Write and execute <code>{python}</code> chunks alongside
+<code>{r}</code> chunks</li>
+<li>Move data across the language boundary with <code>py$</code> and
+<code>r.</code>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section><h2 class="section-heading" id="declaring-what-the-episode-needs">Declaring what the episode needs<a class="anchor" aria-label="anchor" href="#declaring-what-the-episode-needs"></a>
+</h2>
+<hr class="half-width">
+<p>Delete this episode if your lesson is R only. If it is not,
+everything you need is in the hidden <code>python-setup</code> chunk at
+the top of this file, which reads:</p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">Sys.setenv</span><span class="op">(</span>RETICULATE_PYTHON <span class="op">=</span> <span class="st">"managed"</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">reticulate</span><span class="op">)</span></span>
+<span><span class="fu">py_require</span><span class="op">(</span></span>
+<span>  packages       <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"pandas"</span>, <span class="st">"matplotlib"</span><span class="op">)</span>,</span>
+<span>  python_version <span class="op">=</span> <span class="st">"3.12"</span>,</span>
+<span>  exclude_newer  <span class="op">=</span> <span class="st">"2026-08-01"</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<p>Two conventions to follow when you copy it. Give the chunk
+<code>include=FALSE</code> so the plumbing does not appear in the
+rendered episode, and <strong>do not label it
+<code>setup</code></strong>: sandpaper injects a chunk of that name into
+every episode and knitr rejects duplicate labels.</p>
+<p><code>py_require()</code> does not install anything on its own. It
+records what the session needs, and the first time a
+<code>{python}</code> chunk runs, <code>reticulate</code> uses <a href="https://docs.astral.sh/uv/" class="external-link">uv</a> to build an ephemeral virtual
+environment satisfying the whole set, downloading the interpreter as
+well as the packages. Nothing lands in your system Python and nothing
+needs to exist beforehand.</p>
+<p>Version constraints use pip syntax, so <code>"pandas&gt;=2.2"</code>
+and <code>"scikit-learn==1.5.2"</code> both work.</p>
+<div id="why-reticulate_python-managed" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="why-reticulate_python-managed" class="callout-inner">
+<h3 class="callout-title">Why
+<code>RETICULATE_PYTHON = "managed"</code>
+</h3>
+<div class="callout-content">
+<p><code>reticulate</code> walks an order of discovery and only falls
+back to an ephemeral environment if it finds no Python earlier in that
+order. On a machine with conda or miniforge on the <code>PATH</code>,
+conda wins, your <code>py_require()</code> calls are silently ignored,
+and the episode renders against whatever happens to be in that
+environment. It then fails in CI, where that environment does not exist.
+Setting <code>"managed"</code> forces the reproducible path in both
+places.</p>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="running-python">Running Python<a class="anchor" aria-label="anchor" href="#running-python"></a>
+</h2>
+<hr class="half-width">
+<p>A <code>{python}</code> chunk works exactly like an <code>{r}</code>
+chunk:</p>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a>measurements <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a>    <span class="st">"sample"</span>:  [<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>],</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1" aria-label="code-block-2-5"></a>    <span class="st">"depth"</span>:   [<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">40</span>, <span class="dv">55</span>],</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1" aria-label="code-block-2-6"></a>    <span class="st">"reads"</span>:   [<span class="dv">1_204_000</span>, <span class="dv">987_000</span>, <span class="dv">1_530_000</span>, <span class="dv">742_000</span>],</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1" aria-label="code-block-2-7"></a>})</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1" aria-label="code-block-2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a>measurements</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>  sample  depth    reads
+0      A     10  1204000
+1      B     25   987000
+2      C     40  1530000
+3      D     55   742000</code></pre>
+</div>
+<p>Objects persist between Python chunks in the same episode, in one
+shared session:</p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" tabindex="-1" aria-label="code-block-4-1"></a>measurements[<span class="st">"reads_per_m"</span>] <span class="op">=</span> measurements[<span class="st">"reads"</span>] <span class="op">/</span> <span class="fl">1e6</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1" aria-label="code-block-4-2"></a>measurements.describe()</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>           depth         reads  reads_per_m
+count   4.000000  4.000000e+00     4.000000
+mean   32.500000  1.115750e+06     1.115750
+std    19.364917  3.344930e+05     0.334493
+min    10.000000  7.420000e+05     0.742000
+25%    21.250000  9.257500e+05     0.925750
+50%    32.500000  1.095500e+06     1.095500
+75%    43.750000  1.285500e+06     1.285500
+max    55.000000  1.530000e+06     1.530000</code></pre>
+</div>
+</section><section><h2 class="section-heading" id="crossing-the-language-boundary">Crossing the language boundary<a class="anchor" aria-label="anchor" href="#crossing-the-language-boundary"></a>
+</h2>
+<hr class="half-width">
+<p>Python objects are reachable from R through <code>py$</code>,
+converted to their R equivalents. A pandas <code>DataFrame</code>
+arrives as a <code>data.frame</code>:</p>
+<div class="codewrapper sourceCode" id="cb6">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">str</span><span class="op">(</span><span class="va">py</span><span class="op">$</span><span class="va">measurements</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>'data.frame':	4 obs. of  4 variables:
+ $ sample     : chr  "A" "B" "C" "D"
+ $ depth      : num  10 25 40 55
+ $ reads      : num  1204000 987000 1530000 742000
+ $ reads_per_m: num  1.204 0.987 1.53 0.742
+ - attr(*, "pandas.index")=RangeIndex(start=0, stop=4, step=1)</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">summary</span><span class="op">(</span><span class="va">py</span><span class="op">$</span><span class="va">measurements</span><span class="op">$</span><span class="va">reads</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+ 742000  925750 1095500 1115750 1285500 1530000 </code></pre>
+</div>
+<p>R objects go the other way through <code>r.</code>:</p>
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">threshold</span> <span class="op">&lt;-</span> <span class="fl">1e6</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb11">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" tabindex="-1" aria-label="code-block-11-1"></a>above <span class="op">=</span> measurements[measurements[<span class="st">"reads"</span>] <span class="op">&gt;</span> r.threshold]</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1" aria-label="code-block-11-2"></a>above[[<span class="st">"sample"</span>, <span class="st">"reads"</span>]]</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>  sample    reads
+0      A  1204000
+2      C  1530000</code></pre>
+</div>
+</section><section><h2 class="section-heading" id="plots">Plots<a class="anchor" aria-label="anchor" href="#plots"></a>
+</h2>
+<hr class="half-width">
+<p>Matplotlib figures render like any other chunk output. Set
+<code>fig.alt</code> for accessibility, exactly as you would for an R
+plot:</p>
+<div class="codewrapper sourceCode" id="cb13">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" tabindex="-1" aria-label="code-block-13-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1" aria-label="code-block-13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1" aria-label="code-block-13-3"></a>fig, ax <span class="op">=</span> plt.subplots(figsize <span class="op">=</span> (<span class="dv">5</span>, <span class="fl">3.5</span>))</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1" aria-label="code-block-13-4"></a>ax.scatter(measurements[<span class="st">"depth"</span>], measurements[<span class="st">"reads_per_m"</span>])</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1" aria-label="code-block-13-5"></a>ax.set_xlabel(<span class="st">"Depth"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1" aria-label="code-block-13-6"></a>ax.set_ylabel(<span class="st">"Reads (millions)"</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1" aria-label="code-block-13-7"></a>fig.tight_layout()</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1" aria-label="code-block-13-8"></a>plt.show()</span></code></pre>
+</div>
+<figure><img src="fig/python-with-reticulate-rendered-depth-vs-reads-1.png" alt="Scatter plot of sequencing depth against read count for four samples" width="480" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="challenge-1-add-a-dependency" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="challenge-1-add-a-dependency" class="callout-inner">
+<h3 class="callout-title">Challenge 1: add a dependency</h3>
+<div class="callout-content">
+<p>The episode needs <code>numpy</code> as well. What do you change, and
+what do you commit?</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
+  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
+</button>
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div class="accordion-body">
+<p>Add it to the <code>py_require()</code> call in the setup chunk:</p>
+<div class="codewrapper sourceCode" id="cb14">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">py_require</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"pandas"</span>, <span class="st">"matplotlib"</span>, <span class="st">"numpy"</span><span class="op">)</span>, python_version <span class="op">=</span> <span class="st">"3.12"</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Nothing else. Python packages are not recorded in
+<code>renv.lock</code>, so the <code>.Rmd</code> file itself is the only
+thing to commit. Contrast this with adding an <strong>R</strong>
+package, where you add <code>library(...)</code>, rebuild, and then also
+commit the changed
+<code>renv/profiles/lesson-requirements/renv.lock</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="challenge-2-which-python-is-actually-running" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="challenge-2-which-python-is-actually-running" class="callout-inner">
+<h3 class="callout-title">Challenge 2: which Python is actually
+running?</h3>
+<div class="callout-content">
+<p>How would you check, from inside the episode, that the managed
+environment is being used rather than a conda install?</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
+  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
+</button>
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div class="accordion-body">
+<div class="codewrapper sourceCode" id="cb15">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu">py_config</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+<p>The reported <code>python</code> path should sit under reticulate’s
+own cache directory, not under <code>miniforge3/</code> or
+<code>/usr/bin</code>.</p>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="when-this-is-not-enough">When this is not enough<a class="anchor" aria-label="anchor" href="#when-this-is-not-enough"></a>
+</h2>
+<hr class="half-width">
+<p><code>py_require()</code> resolves from PyPI. If your lesson needs a
+bioconda stack, or tools that are not packaged for PyPI, commit an
+<code>environment.yml</code>, point <code>RETICULATE_PYTHON</code> at
+that environment’s interpreter instead of <code>"managed"</code>, and
+add a conda setup step to
+<code>.github/workflows/docker_build_deploy.yaml</code>. That is
+considerably more to maintain, so check first whether the episode should
+be <em>showing</em> pipeline output rather than executing a pipeline at
+build time.</p>
+<div id="keypoints1" class="callout keypoints">
+<div class="callout-square">
+<i class="callout-icon" data-feather="key"></i>
+</div>
+<span class="callout-header">Key Points</span>
+<div class="callout-inner">
+<div class="callout-content">
+<ul>
+<li>
+<code>Sys.setenv(RETICULATE_PYTHON = "managed")</code> forces the
+reproducible environment; without it a local conda install wins and the
+build differs from CI</li>
+<li>
+<code>py_require()</code> declares packages and the Python version;
+<code>uv</code> provisions them on first use</li>
+<li>
+<code>exclude_newer</code> caps resolution at a date, since
+<code>renv.lock</code> never records Python packages</li>
+<li>
+<code>py$name</code> reads Python objects from R,
+<code>r.name</code> reads R objects from Python</li>
+<li>No CI change is needed: <code>uv</code> fetches the interpreter
+inside the build container</li>
 </ul>
 </div>
 </div>
